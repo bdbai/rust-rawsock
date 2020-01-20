@@ -4,7 +4,7 @@ use crate::Error;
 use dlopen::wrapper::Container;
 use std::ffi::{CString, CStr};
 use std::mem::uninitialized;
-use libc::{c_uint, c_int, c_uchar};
+use libc::{c_uint, c_int, c_char, c_uchar};
 use crate::utils::string_from_errno;
 use super::dll::helpers::{string_from_pfring_err_code, borrowed_packet_from_header};
 use std::mem::transmute;
@@ -110,7 +110,7 @@ impl<'a> traits::DynamicInterface<'a> for Interface<'a> {
     }
 
     fn set_filter_cstr(&mut self, filter: &CStr) -> Result<(), Error> {
-        let result = unsafe { self.dll.pfring_set_bpf_filter(self.handle, filter.as_ptr() as *mut i8) };
+        let result = unsafe { self.dll.pfring_set_bpf_filter(self.handle, filter.as_ptr() as *mut c_char) };
         if result == SUCCESS {
             Ok(())
         } else {

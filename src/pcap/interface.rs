@@ -76,6 +76,14 @@ impl<'a> Interface<'a> {
             Err(self.last_error())
         }
     }
+
+    pub fn set_datalink(&mut self, datalink_type: i32) -> Result<(), Error> {
+        if unsafe{self.dll.pcap_set_datalink(self.handle, datalink_type)} == SUCCESS {
+            Ok(())
+        } else {
+            Err(self.last_error())
+        }
+    }
 }
 
 impl<'a> Drop for Interface<'a> {
